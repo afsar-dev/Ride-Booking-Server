@@ -3,17 +3,17 @@ import { userController } from "./user.controller";
 import { checkAuth } from "../../middlewares/check-auth";
 import { Role } from "./user.type";
 import { validateRequest } from "../../middlewares/validation-request";
-import { UserUpdateZodSchema } from "./user.validation";
+import { UpdateUserZodSchema } from "./user.validation";
 
 const router = Router();
 
 router.get("/all-users", checkAuth(Role.ADMIN), userController.getAllUsers);
 router.patch(
   "/update-user/:id",
-  validateRequest(UserUpdateZodSchema),
+  validateRequest(UpdateUserZodSchema),
   checkAuth(...Object.values(Role)),
   userController.updateUser,
 );
-router.patch("/block/:id", checkAuth(Role.ADMIN), userController.blockUser);
+router.patch("/toggle-block/:id", checkAuth(Role.ADMIN), userController.blockUser);
 
-export const userRoutes = router;
+export const usersRoutes = router;

@@ -26,7 +26,7 @@ export const CreateUserZodSchema = z.object({
   role: z.enum(Object.values(Role).filter((role) => role !== "admin") as [string]).optional(),
 });
 
-export const UserUpdateZodSchema = z.object({
+export const UpdateUserZodSchema = z.object({
   name: z
     .string({ error: "Name must be string" })
     .min(2, { message: "Name must be at least 2 characters long." })

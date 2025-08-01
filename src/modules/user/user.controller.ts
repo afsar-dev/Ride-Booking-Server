@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../../utils/catch-async";
 import { userService } from "./user.service";
@@ -33,7 +34,7 @@ export const userController = {
     const result = await userService.blockUser(req.params.id);
     sendResponse(res, {
       success: true,
-      statusCode: StatusCodes.CREATED,
+      statusCode: result.isBlocked ? StatusCodes.FORBIDDEN : StatusCodes.OK,
       message: result.isBlocked ? "User blocked" : "User unblocked",
       data: result,
     });
