@@ -5,15 +5,22 @@ import { sendResponse } from "../../utils/send-response";
 import { StatusCodes } from "http-status-codes";
 
 export const authController = {
-  createUser: catchAsync(
-    async (req: Request, res: Response, next: NextFunction) => {
-      const result = await authService.createUser(req.body);
-      sendResponse(res, {
-        statusCode: StatusCodes.CREATED,
-        success: true,
-        message: "User Created Successfully",
-        data: result,
-      });
-    }
-  ),
+  registerUser: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const result = await authService.registerUser(req.body);
+    sendResponse(res, {
+      statusCode: StatusCodes.CREATED,
+      success: true,
+      message: "User Created Successfully",
+      data: result,
+    });
+  }),
+  login: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const result = await authService.login(res, req.body);
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "User Logged In Successfully",
+      data: result,
+    });
+  }),
 };

@@ -1,0 +1,19 @@
+import { Router } from "express";
+import { userController } from "./user.controller";
+import { checkAuth } from "../../middlewares/check-auth";
+import { Role } from "./user.type";
+import { validateRequest } from "../../middlewares/validation-request";
+import { UserUpdateZodSchema } from "./user.validation";
+
+const router = Router();
+
+router.get("/all-users", checkAuth(Role.ADMIN), userController.getAllUsers);
+router.patch(
+  "/update-user/:id",
+  validateRequest(UserUpdateZodSchema),
+  checkAuth(...Object.values(Role)),
+  userController.updateUser,
+);
+router.patch("/block/:id", checkAuth(Role.ADMIN), userController.blockUser);
+
+export const userRoutes = router;

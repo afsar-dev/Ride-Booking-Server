@@ -5,12 +5,8 @@ import { CreateUserZodSchema } from "../user/user.validation";
 
 const router = Router();
 
-router.post(
-  "/register",
-  validateRequest(CreateUserZodSchema),
-  authController.createUser
-);
+router.post("/register", validateRequest(CreateUserZodSchema), authController.registerUser);
 
-router.post("/login", authController.createUser);
+router.post("/login", authController.login);
 
 export const AuthRoutes = router;

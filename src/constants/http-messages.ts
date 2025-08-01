@@ -5,4 +5,5 @@ export const httpMessages = {
   BAD_REQUEST: "Bad request",
   UNAUTHORIZED: "Unauthorized access",
   FORBIDDEN: "Forbidden",
+  ACCESS: "You are not authorized",
 };

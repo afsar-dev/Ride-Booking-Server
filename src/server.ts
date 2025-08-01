@@ -2,6 +2,7 @@ import { connectDB } from "./config/db";
 import { Server } from "http";
 import { envVars } from "./config/env";
 import app from "./app";
+import { seedAdmin } from "./utils/seedAdmin";
 
 let server: Server;
 
@@ -18,6 +19,7 @@ const startServer = async () => {
 
 (async () => {
   await startServer();
+  await seedAdmin();
 })();
 
 process.on("unhandledRejection", (err) => {

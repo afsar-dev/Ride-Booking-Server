@@ -1,8 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 import bcrypt from "bcryptjs";
 import { IUser, Role } from "./user.type";
+import { IMongooseMethod } from "../../types/method";
 
-const userSchema = new mongoose.Schema<IUser>(
+const userSchema = new mongoose.Schema<IUser, Model<IUser>, IMongooseMethod>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -17,7 +18,7 @@ const userSchema = new mongoose.Schema<IUser>(
   {
     versionKey: false,
     timestamps: true,
-  }
+  },
 );
 
 userSchema.pre("save", async function (next) {
@@ -26,6 +27,16 @@ userSchema.pre("save", async function (next) {
     this.password = await bcrypt.hash(this.password, salt);
     next();
   }
+});
+
+userSchema.pre("findOneAndUpdate", async function (next) {
+  const update = this.getUpdate() as Partial<IUser>;
+  if (update.password) {
+    const salt = await bcrypt.genSalt(12);
+    update.password = await bcrypt.hash(update.password, salt);
+    this.setUpdate(update);
+  }
+  next();
 });
 
 userSchema.method("comparePassword", async function (realPassword) {

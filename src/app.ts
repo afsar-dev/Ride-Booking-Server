@@ -30,5 +30,4 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
 app.use(globalErrorHandler);
 app.use(notFound);
 
-
 export default app;

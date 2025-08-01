@@ -1,12 +1,7 @@
 import { ErrorRequestHandler } from "express";
 import { envVars } from "../config/env";
 
-export const globalErrorHandler: ErrorRequestHandler = (
-  err,
-  req,
-  res,
-  next
-) => {
+export const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (envVars.NODE_ENV === "development") {
     console.log(err);
   }
