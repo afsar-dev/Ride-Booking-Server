@@ -29,8 +29,19 @@ export const driverService = {
       throw new AppError(StatusCodes.BAD_REQUEST, "Driver not found");
     }
 
-    driver.status =
-      driver.status === DriverStatus.Approved ? DriverStatus.Suspended : DriverStatus.Approved;
+    driver.status = DriverStatus.Approved;
+    await driver.save();
+
+    return driver;
+  },
+
+  suspendDriver: async (driverId: string) => {
+    const driver = await Driver.findById(driverId);
+    if (!driver) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Driver not found");
+    }
+
+    driver.status = DriverStatus.Suspended;
     await driver.save();
 
     return driver;

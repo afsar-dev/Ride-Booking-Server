@@ -34,8 +34,17 @@ export const userController = {
     const result = await userService.blockUser(req.params.id);
     sendResponse(res, {
       success: true,
-      statusCode: result.isBlocked ? StatusCodes.FORBIDDEN : StatusCodes.OK,
-      message: result.isBlocked ? "User blocked" : "User unblocked",
+      statusCode: StatusCodes.OK,
+      message: "User is blocked",
+      data: result,
+    });
+  }),
+  unblockUser: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const result = await userService.unblockUser(req.params.id);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "User is unblocked",
       data: result,
     });
   }),

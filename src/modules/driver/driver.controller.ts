@@ -20,9 +20,17 @@ export const driverController = {
     const result = await driverService.approveDriver(req.params.id);
     sendResponse(res, {
       success: true,
-      statusCode: result.status === DriverStatus.Approved ? StatusCodes.OK : StatusCodes.FORBIDDEN,
-      message:
-        result.status === DriverStatus.Approved ? DriverStatus.Approved : DriverStatus.Suspended,
+      statusCode: StatusCodes.OK,
+      message: DriverStatus.Approved,
+      data: result,
+    });
+  }),
+  suspendDriver: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const result = await driverService.suspendDriver(req.params.id);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: DriverStatus.Suspended,
       data: result,
     });
   }),

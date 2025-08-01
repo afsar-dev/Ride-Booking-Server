@@ -48,7 +48,17 @@ export const userService = {
     if (!user) {
       throw new AppError(StatusCodes.NOT_FOUND, "User Not Found");
     }
-    user.isBlocked = !user.isBlocked;
+    user.isBlocked = true;
+    await user.save();
+
+    return user;
+  },
+  unblockUser: async (userId: string) => {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new AppError(StatusCodes.NOT_FOUND, "User Not Found");
+    }
+    user.isBlocked = false;
     await user.save();
 
     return user;

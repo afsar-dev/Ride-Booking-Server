@@ -16,6 +16,7 @@ router.post(
 
 router.get("/all-drivers", checkAuth(Role.ADMIN), driverController.getAllDrivers);
 
-router.patch("/toggle-status/:id", checkAuth(Role.ADMIN), driverController.approveDriver);
+router.patch("/approve/:id", checkAuth(Role.ADMIN), driverController.approveDriver);
+router.patch("/suspend/:id", checkAuth(Role.ADMIN), driverController.suspendDriver);
 
 export const driverRouters = router;

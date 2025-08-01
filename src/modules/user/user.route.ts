@@ -14,6 +14,7 @@ router.patch(
   checkAuth(...Object.values(Role)),
   userController.updateUser,
 );
-router.patch("/toggle-block/:id", checkAuth(Role.ADMIN), userController.blockUser);
+router.patch("/block/:id", checkAuth(Role.ADMIN), userController.blockUser);
+router.patch("/unblock/:id", checkAuth(Role.ADMIN), userController.unblockUser);
 
 export const usersRoutes = router;
