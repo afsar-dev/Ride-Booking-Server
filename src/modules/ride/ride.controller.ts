@@ -16,4 +16,14 @@ export const rideController = {
       meta: result.meta,
     });
   }),
+
+  requestRide: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const result = await rideService.requestRide(req.body);
+    sendResponse(res, {
+      statusCode: StatusCodes.CREATED,
+      success: true,
+      message: "Ride requested successfully",
+      data: result,
+    });
+  }),
 };

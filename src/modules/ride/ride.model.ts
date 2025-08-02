@@ -3,7 +3,7 @@ import { IRide, RideStatus } from "./ride.type";
 
 const rideSchema = new mongoose.Schema<IRide>(
   {
-    riderId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    riderId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     driverId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     pickup: {
       lat: { type: Number, required: true },

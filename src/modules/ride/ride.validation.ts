@@ -1,10 +1,8 @@
 import { z } from "zod";
-import { Types } from "mongoose";
 import { RideStatus } from "./ride.type";
 
-export const rideValidationSchema = z.object({
-  riderId: z.instanceof(Types.ObjectId, { message: "Invalid Rider ID" }),
-  driverId: z.instanceof(Types.ObjectId, { message: "Invalid Driver ID" }).optional(),
+export const rideRequestValidationSchema = z.object({
+  riderId: z.string({ error: "Invalid Rider ID" }),
   pickup: z.object({
     lat: z.number(),
     lng: z.number(),
@@ -13,9 +11,13 @@ export const rideValidationSchema = z.object({
   destination: z.object({
     lat: z.number(),
     lng: z.number(),
-    address: z.string().min(1, "Destination address is required"),
+    address: z.string().min(3, "Destination address is required"),
   }),
-  status: z.enum(Object.values(RideStatus)).optional().default(RideStatus.Requested),
+});
+
+export const rideRequestUpdateValidationSchema = z.object({
+  driverId: z.string({ error: "Invalid Driver ID" }),
+  status: z.enum(Object.values(RideStatus)),
   timestamps: z
     .object({
       requestedAt: z.date().optional(),

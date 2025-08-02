@@ -11,15 +11,15 @@ export enum RideStatus {
 
 export interface IRide {
   riderId: Types.ObjectId;
-  driverId: Types.ObjectId;
+  driverId?: Types.ObjectId;
   pickup: {
-    lat?: number;
-    lng?: number;
+    lat: number;
+    lng: number;
     address: string;
   };
   destination: {
-    lat?: number;
-    lng?: number;
+    lat: number;
+    lng: number;
     address: string;
   };
   status?: RideStatus;
