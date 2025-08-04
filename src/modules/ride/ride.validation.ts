@@ -2,7 +2,7 @@ import { z } from "zod";
 import { RideStatus } from "./ride.type";
 
 export const rideRequestValidationSchema = z.object({
-  riderId: z.string({ error: "Invalid Rider ID" }),
+  // riderId: z.string({ error: "Invalid Rider ID" }),
   pickup: z.object({
     lat: z.number(),
     lng: z.number(),

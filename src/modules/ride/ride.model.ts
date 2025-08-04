@@ -4,7 +4,7 @@ import { IRide, RideStatus } from "./ride.type";
 const rideSchema = new mongoose.Schema<IRide>(
   {
     riderId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    driverId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    driverId: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
     pickup: {
       lat: { type: Number, required: true },
       lng: { type: Number, required: true },
@@ -22,9 +22,9 @@ const rideSchema = new mongoose.Schema<IRide>(
     },
     timestamps: {
       requestedAt: { type: Date, default: Date.now },
-      acceptedAt: Date,
-      pickedUpAt: Date,
-      completedAt: Date,
+      acceptedAt: { type: Date, default: null },
+      pickedUpAt: { type: Date, default: null },
+      completedAt: { type: Date, default: null },
     },
   },
   {

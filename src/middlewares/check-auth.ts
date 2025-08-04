@@ -30,14 +30,11 @@ export const checkAuth =
         throw new AppError(StatusCodes.BAD_REQUEST, `User is Blocked`);
       }
 
-      if (isUserExist.isBlocked) {
-        throw new AppError(StatusCodes.BAD_REQUEST, "User is deleted");
-      }
-
       if (!authRoles.includes(verifiedToken.role)) {
         throw new AppError(403, "You are not permitted to view this route!!!");
       }
       req.user = verifiedToken;
+      req.id = isUserExist._id;
       next();
     } catch (error) {
       next(error);

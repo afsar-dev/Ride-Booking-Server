@@ -52,6 +52,6 @@ export const UpdateUserZodSchema = z.object({
     })
     .optional(),
 
-  role: z.enum(Object.values(Role) as [string]).optional(),
+  role: z.enum(Object.values(Role).filter((role) => role !== Role.ADMIN)).optional(),
   isBlocked: z.boolean({ error: "isBlocked must be true or false" }).optional(),
 });

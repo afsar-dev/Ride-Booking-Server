@@ -1,4 +1,3 @@
-import bcryptjs from "bcryptjs";
 import { envVars } from "../config/env";
 import { User } from "../modules/user/user.model";
 import { IUser, Role } from "../modules/user/user.type";
@@ -16,16 +15,11 @@ export const seedAdmin = async () => {
 
     console.log("Trying to create  Admin...");
 
-    const hashedPassword = await bcryptjs.hash(
-      envVars.ADMIN_PASSWORD,
-      Number(envVars.BCRYPT_SALT_ROUND),
-    );
-
     const payload: IUser = {
       name: " admin",
       role: Role.ADMIN,
       email: envVars.ADMIN_EMAIL,
-      password: hashedPassword,
+      password: envVars.ADMIN_PASSWORD,
       isBlocked: false,
     };
 

@@ -6,8 +6,8 @@ import { Driver } from "./driver.model";
 import { Role } from "../user/user.type";
 
 export const driverService = {
-  addDriverInfo: async (payload: IDriver) => {
-    const { userId, licenseNumber } = payload;
+  addDriverInfo: async (payload: IDriver, userId: string) => {
+    const { licenseNumber } = payload;
     const user = await User.findById(userId);
     if (!user) {
       throw new AppError(StatusCodes.BAD_REQUEST, "User does not exist");
@@ -15,16 +15,20 @@ export const driverService = {
     if (user.role !== Role.DRIVER) {
       throw new AppError(StatusCodes.BAD_REQUEST, "User role must be driver");
     }
+    const driverExist = await Driver.findById(userId);
+    if (driverExist) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Driver all ready exist");
+    }
     const license = await Driver.findOne({ licenseNumber });
     if (license) {
       throw new AppError(StatusCodes.BAD_REQUEST, "License already exist");
     }
-    const driver = await Driver.create(payload);
+    const driver = await Driver.create({ ...payload, userId });
     return driver;
   },
 
-  approveDriver: async (driverId: string) => {
-    const driver = await Driver.findById(driverId);
+  approveDriver: async (userId: string) => {
+    const driver = await Driver.findOne({ userId });
     if (!driver) {
       throw new AppError(StatusCodes.BAD_REQUEST, "Driver not found");
     }

@@ -8,7 +8,8 @@ import { DriverStatus } from "./driver.type";
 
 export const driverController = {
   addDriverInfo: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const result = await driverService.addDriverInfo(req.body);
+    const userId = req.id;
+    const result = await driverService.addDriverInfo(req.body, userId);
     sendResponse(res, {
       statusCode: StatusCodes.CREATED,
       success: true,

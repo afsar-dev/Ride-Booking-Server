@@ -8,9 +8,9 @@ import { AddDriverInfoZodSchema } from "./driver.validation";
 const router = Router();
 
 router.post(
-  "/add-info",
+  "/add-information",
   validateRequest(AddDriverInfoZodSchema),
-  checkAuth(Role.DRIVER || Role.ADMIN),
+  checkAuth(Role.DRIVER, Role.ADMIN),
   driverController.addDriverInfo,
 );
 

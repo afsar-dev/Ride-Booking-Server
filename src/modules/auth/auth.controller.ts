@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from "express";
 import { authService } from "./auth.service";
 import { catchAsync } from "../../utils/catch-async";
