@@ -16,7 +16,7 @@ export const rideRequestValidationSchema = z.object({
 });
 
 export const rideRequestUpdateValidationSchema = z.object({
-  driverId: z.string({ error: "Invalid Driver ID" }),
+  // driverId: z.string({ error: "Invalid Driver ID" }),
   status: z.enum(Object.values(RideStatus)),
   timestamps: z
     .object({

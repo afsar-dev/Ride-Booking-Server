@@ -5,11 +5,13 @@ import { rideController } from "./ride.controller";
 import { validateRequest } from "../../middlewares/validation-request";
 import { rideRequestValidationSchema } from "./ride.validation";
 import { checkDriverApprove } from "../../middlewares/checkDriverApprove";
+// import { param } from "express-validator";
+
 
 const router = Router();
 
 router.get("/all-rides", checkAuth(Role.ADMIN), rideController.getAllRides);
-router.get("/me", checkAuth(Role.RIDER, Role.ADMIN), rideController.getRiderHistory);
+router.get("/me", checkAuth(Role.RIDER), rideController.getRiderHistory);
 router.get(
   "/available",
   checkAuth(Role.DRIVER, Role.ADMIN),
@@ -20,16 +22,18 @@ router.get(
 router.post(
   "/request",
   validateRequest(rideRequestValidationSchema),
-  checkAuth(Role.RIDER || Role.ADMIN),
+  checkAuth(Role.RIDER),
   rideController.requestRide,
 );
+router.patch("/accept/:id", checkAuth(Role.DRIVER), checkDriverApprove, rideController.acceptRide);
+
 router.patch(
-  "/accept/:id",
-  checkAuth(Role.DRIVER, Role.ADMIN),
+  "/:id/status",
+  checkAuth(Role.DRIVER),
   checkDriverApprove,
-  rideController.acceptRide,
+  rideController.updateRideStatus,
 );
 
-router.patch("/cancel/:id", checkAuth(Role.RIDER, Role.ADMIN), rideController.cancelRide);
+router.patch("/cancel", checkAuth(Role.RIDER), rideController.cancelRide);
 
 export const rideRouters = router;

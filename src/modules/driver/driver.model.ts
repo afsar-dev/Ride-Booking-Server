@@ -17,7 +17,6 @@ const driverSchema = new mongoose.Schema<IDriver>(
     },
     status: { type: String, enum: Object.values(DriverStatus), default: "pending" },
     availability: { type: String, enum: Object.values(DriverAvailability), default: "offline" },
-    totalEarnings: { type: Number, default: 0 },
   },
   {
     versionKey: false,

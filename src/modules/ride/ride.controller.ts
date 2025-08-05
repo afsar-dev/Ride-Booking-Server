@@ -23,7 +23,7 @@ export const rideController = {
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,
-      message: "Rides History Retrieved Successfully",
+      message: "My Rides History Retrieved Successfully",
       data: result.data,
       meta: result.meta,
     });
@@ -62,8 +62,20 @@ export const rideController = {
     });
   }),
 
+  updateRideStatus: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const driverId = req.id;
+    const result = await rideService.updateRideStatus(req.params.id, driverId);
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "Ride status updated successfully",
+      data: result,
+    });
+  }),
+
   cancelRide: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const result = await rideService.cancelRide(req.params.id);
+    const riderId = req.id;
+    const result = await rideService.cancelRide(riderId);
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,

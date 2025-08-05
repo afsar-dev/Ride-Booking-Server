@@ -1,9 +1,10 @@
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../helpers/AppError";
-import { DriverStatus, IDriver } from "./driver.type";
+import { DriverAvailability, DriverStatus, IDriver } from "./driver.type";
 import { User } from "../user/user.model";
 import { Driver } from "./driver.model";
 import { Role } from "../user/user.type";
+import { Ride } from "../ride/ride.model";
 
 export const driverService = {
   addDriverInfo: async (payload: IDriver, userId: string) => {
@@ -39,6 +40,30 @@ export const driverService = {
     return driver;
   },
 
+  updateAvailabilityToOnline: async (userId: string) => {
+    const driver = await Driver.findOne({ userId });
+    if (!driver) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Driver not found");
+    }
+
+    driver.availability = DriverAvailability.Online;
+    await driver.save();
+
+    return driver;
+  },
+
+  updateAvailabilityToOffline: async (userId: string) => {
+    const driver = await Driver.findOne({ userId });
+    if (!driver) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Driver not found");
+    }
+
+    driver.availability = DriverAvailability.Offline;
+    await driver.save();
+
+    return driver;
+  },
+
   suspendDriver: async (driverId: string) => {
     const driver = await Driver.findById(driverId);
     if (!driver) {
@@ -49,6 +74,16 @@ export const driverService = {
     await driver.save();
 
     return driver;
+  },
+
+  getEarnings: async (driverId: string) => {
+    const rides = await Ride.find({
+      driverId,
+      status: "completed",
+    });
+    const totalEarnings = 200 * rides?.length;
+
+    return totalEarnings;
   },
 
   getAllDrivers: async () => {

@@ -20,7 +20,6 @@ export interface IDriver {
   };
   status?: DriverStatus;
   availability?: DriverAvailability;
-  totalEarnings?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

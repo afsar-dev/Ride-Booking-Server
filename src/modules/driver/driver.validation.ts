@@ -1,6 +1,5 @@
 import z from "zod";
 import { DriverAvailability, DriverStatus } from "./driver.type";
-import { Types } from "mongoose";
 
 export const AddDriverInfoZodSchema = z.object({
   // userId: z.instanceof(Types.ObjectId, { message: "Invalid User ID" }),
@@ -16,7 +15,7 @@ export const AddDriverInfoZodSchema = z.object({
 });
 
 export const UpdateDriverInfoZodSchema = z.object({
-  userId: z.instanceof(Types.ObjectId, { message: "Invalid User ID" }),
+  // userId: z.instanceof(Types.ObjectId, { message: "Invalid User ID" }),
   licenseNumber: z.string().min(3, "License number is required"),
   vehicleInfo: z.object({
     type: z.string().min(3, "Vehicle type is required"),
@@ -30,5 +29,5 @@ export const UpdateDriverInfoZodSchema = z.object({
     .enum(Object.values(DriverAvailability) as [string])
     .optional()
     .default(DriverAvailability.Offline),
-  totalEarnings: z.number().min(0).optional().default(0),
+  // totalEarnings: z.number().min(0).optional().default(0),
 });

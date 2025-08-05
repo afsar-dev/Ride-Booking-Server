@@ -4,7 +4,7 @@ import { catchAsync } from "../../utils/catch-async";
 import { driverService } from "./driver.service";
 import { sendResponse } from "../../utils/send-response";
 import { StatusCodes } from "http-status-codes";
-import { DriverStatus } from "./driver.type";
+import { DriverAvailability, DriverStatus } from "./driver.type";
 
 export const driverController = {
   addDriverInfo: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -26,12 +26,46 @@ export const driverController = {
       data: result,
     });
   }),
+  updateAvailabilityToOnline: catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const driverId = req.id;
+      const result = await driverService.updateAvailabilityToOnline(driverId);
+      sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.ACCEPTED,
+        message: "Availability updated to " + DriverAvailability.Online,
+        data: result,
+      });
+    },
+  ),
+  updateAvailabilityToOffline: catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const driverId = req.id;
+      const result = await driverService.updateAvailabilityToOffline(driverId);
+      sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.ACCEPTED,
+        message: "Availability updated to " + DriverAvailability.Offline,
+        data: result,
+      });
+    },
+  ),
   suspendDriver: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const result = await driverService.suspendDriver(req.params.id);
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.OK,
       message: DriverStatus.Suspended,
+      data: result,
+    });
+  }),
+  getEarnings: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const driverId = req.id;
+    const result = await driverService.getEarnings(driverId);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "Total Earning",
       data: result,
     });
   }),
