@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema<IUser, Model<IUser>, IMongooseMethod>(
       default: Role.RIDER,
     },
     isBlocked: { type: Boolean, default: false },
+    cancelCount: { type: Number, default: 0 },
   },
   {
     versionKey: false,

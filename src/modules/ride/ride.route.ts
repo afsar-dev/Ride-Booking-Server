@@ -1,12 +1,11 @@
 import { Router } from "express";
-import { checkAuth } from "../../middlewares/check-auth";
+import { checkAuth } from "../../middlewares/checkAuth";
 import { Role } from "../user/user.type";
 import { rideController } from "./ride.controller";
-import { validateRequest } from "../../middlewares/validation-request";
+import { validateRequest } from "../../middlewares/validationRequest";
 import { rideRequestValidationSchema } from "./ride.validation";
 import { checkDriverApprove } from "../../middlewares/checkDriverApprove";
 // import { param } from "express-validator";
-
 
 const router = Router();
 
@@ -15,6 +14,13 @@ router.get("/me", checkAuth(Role.RIDER), rideController.getRiderHistory);
 router.get(
   "/available",
   checkAuth(Role.DRIVER, Role.ADMIN),
+  checkDriverApprove,
+  rideController.getAvailableRides,
+);
+
+router.get(
+  "/completed",
+  checkAuth(Role.DRIVER),
   checkDriverApprove,
   rideController.getAvailableRides,
 );
@@ -34,6 +40,6 @@ router.patch(
   rideController.updateRideStatus,
 );
 
-router.patch("/cancel", checkAuth(Role.RIDER), rideController.cancelRide);
+router.patch("/cancel", checkAuth(Role.RIDER, Role.DRIVER), rideController.cancelRide);
 
 export const rideRouters = router;

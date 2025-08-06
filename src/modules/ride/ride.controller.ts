@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from "express";
-import { catchAsync } from "../../utils/catch-async";
-import { sendResponse } from "../../utils/send-response";
+import { catchAsync } from "../../utils/catchAsync";
+import { sendResponse } from "../../utils/sendResponse";
 import { rideService } from "./ride.service";
 import { StatusCodes } from "http-status-codes";
 
@@ -35,6 +35,18 @@ export const rideController = {
       statusCode: StatusCodes.OK,
       success: true,
       message: "All Available Rides History Retrieved Successfully",
+      data: result.data,
+      meta: result.meta,
+    });
+  }),
+
+  getCompletedRides: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const driverId = req.id;
+    const result = await rideService.getCompletedRides(driverId);
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "All Completed Rides History Retrieved Successfully",
       data: result.data,
       meta: result.meta,
     });
@@ -74,8 +86,8 @@ export const rideController = {
   }),
 
   cancelRide: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const riderId = req.id;
-    const result = await rideService.cancelRide(riderId);
+    const userid = req.id;
+    const result = await rideService.cancelRide(userid);
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,

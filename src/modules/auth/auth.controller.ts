@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from "express";
 import { authService } from "./auth.service";
-import { catchAsync } from "../../utils/catch-async";
-import { sendResponse } from "../../utils/send-response";
+import { catchAsync } from "../../utils/catchAsync";
+import { sendResponse } from "../../utils/sendResponse";
 import { StatusCodes } from "http-status-codes";
 
 export const authController = {

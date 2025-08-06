@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
-import { sendResponse } from "../utils/send-response";
+import { sendResponse } from "../utils/sendResponse";
 import { Request, Response } from "express";
-import { httpMessages } from "../constants/http-messages";
+import { httpMessages } from "../constants/httpMessages";
 
 export const notFound = (req: Request, res: Response) => {
   sendResponse(res, {

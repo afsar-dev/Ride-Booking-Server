@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import AppError from "../../helpers/AppError";
 import { User } from "../user/user.model";
 import { IUser } from "../user/user.type";
-import { createUsersToken } from "../../utils/user-tokens";
+import { createUsersToken } from "../../utils/userTokens";
 import { setAuthCookie } from "../../utils/setCookie";
 import { Response } from "express";
 

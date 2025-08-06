@@ -11,7 +11,7 @@ export enum RideStatus {
 
 export interface IRide {
   riderId: Types.ObjectId;
-  driverId?: Types.ObjectId;
+  driverId?: Types.ObjectId | null;
   pickup: {
     lat: number;
     lng: number;

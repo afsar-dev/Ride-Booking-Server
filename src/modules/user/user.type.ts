@@ -10,5 +10,6 @@ export interface IUser {
   email: string;
   password: string;
   role: Role;
+  cancelCount?: number;
   isBlocked?: boolean;
 }

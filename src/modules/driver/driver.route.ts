@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { checkAuth } from "../../middlewares/check-auth";
+import { checkAuth } from "../../middlewares/checkAuth";
 import { Role } from "../user/user.type";
 import { driverController } from "./driver.controller";
-import { validateRequest } from "../../middlewares/validation-request";
+import { validateRequest } from "../../middlewares/validationRequest";
 import { AddDriverInfoZodSchema } from "./driver.validation";
 import { checkDriverApprove } from "../../middlewares/checkDriverApprove";
 

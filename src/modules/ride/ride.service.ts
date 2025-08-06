@@ -7,6 +7,7 @@ import { User } from "../user/user.model";
 import { ObjectId } from "mongodb";
 import { Driver } from "../driver/driver.model";
 import { DriverAvailability, DriverStatus } from "../driver/driver.type";
+import { Role } from "../user/user.type";
 
 export const rideService = {
   getAllRides: async () => {
@@ -45,6 +46,20 @@ export const rideService = {
     };
   },
 
+  getCompletedRides: async (driverId: string) => {
+    const rides = await Ride.find({
+      status: RideStatus.Accepted,
+      driverId,
+    }).sort({ createdAt: -1 });
+    const completedRides = rides.length;
+    return {
+      data: rides,
+      meta: {
+        total: completedRides,
+      },
+    };
+  },
+
   requestRide: async (payload: Partial<IRide>, riderId: string) => {
     const rider = await User.findById(riderId);
     if (!rider) {
@@ -78,6 +93,15 @@ export const rideService = {
     }
     if (ride.status !== RideStatus.Requested) {
       throw new AppError(StatusCodes.UNAUTHORIZED, "Ride is already accepted");
+    }
+
+    const existingRide = await Ride.findOne({
+      driverId,
+      status: { $in: [RideStatus.Accepted, RideStatus.PickedUp, RideStatus.InTransit] },
+    });
+
+    if (existingRide) {
+      throw new AppError(StatusCodes.UNAUTHORIZED, "Driver is already on another active ride");
     }
 
     const updatedData = {
@@ -128,12 +152,18 @@ export const rideService = {
     return updatedRide;
   },
 
-  cancelRide: async (riderId: string) => {
-    const rider = await User.findById(riderId);
-    if (!rider) {
+  cancelRide: async (userid: string) => {
+    const user = await User.findById(userid);
+    const cancelLimit = 10;
+
+    if (!user) {
       throw new AppError(StatusCodes.UNAUTHORIZED, "Rider id is not registered");
     }
-    const ride = await Ride.findOne({ riderId });
+    if (user.cancelCount! >= cancelLimit) {
+      throw new AppError(StatusCodes.UNAUTHORIZED, "Maximum cancel attempts reached");
+    }
+    const roleField = user.role === Role.RIDER ? "riderId" : "driverId";
+    const ride = await Ride.findOne({ [roleField]: userid });
     if (!ride) {
       throw new AppError(StatusCodes.FORBIDDEN, "Ride not found");
     }
@@ -142,11 +172,22 @@ export const rideService = {
       throw new AppError(StatusCodes.FORBIDDEN, "Ride already canceled");
     }
 
-    if (ride.status !== RideStatus.Requested) {
+    if (user.role === Role.RIDER && ride.status !== RideStatus.Requested) {
       throw new AppError(StatusCodes.CONFLICT, "Cannot cancel after driver accepts");
     }
+    if (user.role === Role.DRIVER) {
+      if ([RideStatus.PickedUp, RideStatus.InTransit].includes(ride.status as RideStatus)) {
+        throw new AppError(StatusCodes.CONFLICT, "Cannot cancel after ride has started");
+      }
+      ride.driverId = null;
+      ride.status = RideStatus.Requested;
+    } else {
+      ride.status = RideStatus.Cancelled;
+    }
 
-    ride.status = RideStatus.Cancelled;
+    // Increase cancel count
+    user.cancelCount = (user.cancelCount || 0) + 1;
+    await user.save();
     await ride.save();
 
     return ride;

@@ -3,7 +3,7 @@ import { User } from "./user.model";
 import { IUser, Role } from "./user.type";
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../helpers/AppError";
-import { httpMessages } from "../../constants/http-messages";
+import { httpMessages } from "../../constants/httpMessages";
 
 export const userService = {
   getAllUsers: async () => {

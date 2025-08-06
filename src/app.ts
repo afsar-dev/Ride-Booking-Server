@@ -1,10 +1,10 @@
 import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
-import { notFound } from "./middlewares/not-found";
-import { sendResponse } from "./utils/send-response";
+import { notFound } from "./middlewares/notFound";
+import { sendResponse } from "./utils/sendResponse";
 import { StatusCodes } from "http-status-codes";
-import { httpMessages } from "./constants/http-messages";
-import { globalErrorHandler } from "./middlewares/global-error-handler";
+import { httpMessages } from "./constants/httpMessages";
+import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import { v1router } from "./routes";
 
 const app: Application = express();
