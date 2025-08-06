@@ -15,11 +15,13 @@ router.post(
   driverController.addDriverInfo,
 );
 
+router.get("/my-earning", checkAuth(Role.DRIVER), checkDriverApprove, driverController.getEarnings);
+
 router.get(
-  "/my-earning",
+  "/completed",
   checkAuth(Role.DRIVER),
   checkDriverApprove,
-  driverController.addDriverInfo,
+  driverController.getCompletedRides,
 );
 
 router.patch(

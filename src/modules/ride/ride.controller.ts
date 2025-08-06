@@ -40,18 +40,6 @@ export const rideController = {
     });
   }),
 
-  getCompletedRides: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const driverId = req.id;
-    const result = await rideService.getCompletedRides(driverId);
-    sendResponse(res, {
-      statusCode: StatusCodes.OK,
-      success: true,
-      message: "All Completed Rides History Retrieved Successfully",
-      data: result.data,
-      meta: result.meta,
-    });
-  }),
-
   requestRide: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const riderId = req.id;
     const result = await rideService.requestRide(req.body, riderId);

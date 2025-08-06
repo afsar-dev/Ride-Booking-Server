@@ -5,6 +5,7 @@ import { User } from "../user/user.model";
 import { Driver } from "./driver.model";
 import { Role } from "../user/user.type";
 import { Ride } from "../ride/ride.model";
+import { RideStatus } from "../ride/ride.type";
 
 export const driverService = {
   addDriverInfo: async (payload: IDriver, userId: string) => {
@@ -38,6 +39,20 @@ export const driverService = {
     await driver.save();
 
     return driver;
+  },
+
+  getCompletedRides: async (driverId: string) => {
+    const rides = await Ride.find({
+      status: RideStatus.Completed,
+      driverId,
+    }).sort({ createdAt: -1 });
+    const completedRides = rides.length;
+    return {
+      data: rides,
+      meta: {
+        total: completedRides,
+      },
+    };
   },
 
   updateAvailabilityToOnline: async (userId: string) => {

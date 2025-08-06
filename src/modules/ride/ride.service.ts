@@ -46,31 +46,10 @@ export const rideService = {
     };
   },
 
-  getCompletedRides: async (driverId: string) => {
-    const rides = await Ride.find({
-      status: RideStatus.Accepted,
-      driverId,
-    }).sort({ createdAt: -1 });
-    const completedRides = rides.length;
-    return {
-      data: rides,
-      meta: {
-        total: completedRides,
-      },
-    };
-  },
-
   requestRide: async (payload: Partial<IRide>, riderId: string) => {
     const rider = await User.findById(riderId);
     if (!rider) {
       throw new AppError(StatusCodes.UNAUTHORIZED, "Rider id is not registered");
-    }
-    const availableDrivers = await Driver.find({
-      status: DriverStatus.Approved,
-      availability: DriverAvailability.Online,
-    });
-    if (availableDrivers.length) {
-      throw new AppError(StatusCodes.LENGTH_REQUIRED, "Drivers not available");
     }
     const existingRide = await Ride.findOne({
       riderId: riderId,
@@ -80,9 +59,15 @@ export const rideService = {
     if (existingRide) {
       throw new AppError(StatusCodes.CONFLICT, "You already have a pending ride request");
     }
+    const availableDrivers = await Driver.find({
+      status: DriverStatus.Approved,
+      availability: DriverAvailability.Online,
+    });
+    if (availableDrivers.length === 0) {
+      throw new AppError(StatusCodes.LENGTH_REQUIRED, "Drivers not available");
+    }
 
     const ride = await Ride.create({ riderId, ...payload });
-
     return ride;
   },
 
@@ -176,7 +161,14 @@ export const rideService = {
       throw new AppError(StatusCodes.CONFLICT, "Cannot cancel after driver accepts");
     }
     if (user.role === Role.DRIVER) {
-      if ([RideStatus.PickedUp, RideStatus.InTransit].includes(ride.status as RideStatus)) {
+      if (ride.status === RideStatus.Requested) {
+        throw new AppError(StatusCodes.CONFLICT, "Ride is already in request");
+      }
+      if (
+        [RideStatus.PickedUp, RideStatus.InTransit, RideStatus.Completed].includes(
+          ride.status as RideStatus,
+        )
+      ) {
         throw new AppError(StatusCodes.CONFLICT, "Cannot cancel after ride has started");
       }
       ride.driverId = null;

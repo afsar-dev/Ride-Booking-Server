@@ -18,13 +18,6 @@ router.get(
   rideController.getAvailableRides,
 );
 
-router.get(
-  "/completed",
-  checkAuth(Role.DRIVER),
-  checkDriverApprove,
-  rideController.getAvailableRides,
-);
-
 router.post(
   "/request",
   validateRequest(rideRequestValidationSchema),

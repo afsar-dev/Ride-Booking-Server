@@ -26,6 +26,17 @@ export const driverController = {
       data: result,
     });
   }),
+  getCompletedRides: catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const driverId = req.id;
+    const result = await driverService.getCompletedRides(driverId);
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "All Completed Rides History Retrieved Successfully",
+      data: result.data,
+      meta: result.meta,
+    });
+  }),
   updateAvailabilityToOnline: catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
       const driverId = req.id;
