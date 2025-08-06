@@ -8,6 +8,8 @@ export default tseslint.config(
   {
     rules: {
       "no-console": "warn",
+      "no-undef": "off",
+      "@typescript-eslint/no-require-imports": "off",
     },
   },
 );

@@ -43,7 +43,7 @@ process.on("uncaughtException", (err) => {
 });
 
 process.on("SIGTERM", (err) => {
-  console.log(`SIGTERM signal received... server shutting down...`);
+  console.log(`SIGTERM signal received... server shutting down...`, err);
   if (server) {
     server.close(() => {
       process.exit(1);
@@ -53,7 +53,7 @@ process.on("SIGTERM", (err) => {
 });
 
 process.on("SIGINT", (err) => {
-  console.log(`SIGINT signal received... server shutting down...`);
+  console.log(`SIGINT signal received... server shutting down...`, err);
   if (server) {
     server.close(() => {
       process.exit(1);
