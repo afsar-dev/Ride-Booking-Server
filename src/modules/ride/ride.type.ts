@@ -24,9 +24,9 @@ export interface IRide {
   };
   status?: RideStatus;
   timestamps?: {
-    requestedAt?: Date;
-    acceptedAt?: Date;
-    pickedUpAt?: Date;
-    completedAt?: Date;
+    requestedAt?: Date | null;
+    acceptedAt?: Date | null;
+    pickedUpAt?: Date | null;
+    completedAt?: Date | null;
   };
 }

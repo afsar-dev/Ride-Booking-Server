@@ -171,6 +171,7 @@ export const rideService = {
       ) {
         throw new AppError(StatusCodes.CONFLICT, "Cannot cancel after ride has started");
       }
+      ride.timestamps!.acceptedAt = null;
       ride.driverId = null;
       ride.status = RideStatus.Requested;
     } else {

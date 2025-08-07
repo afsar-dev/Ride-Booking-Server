@@ -5,7 +5,7 @@ import { DriverStatus } from "../modules/driver/driver.type";
 import { NextFunction, Request, Response } from "express";
 
 export const checkDriverApprove = async (req: Request, res: Response, next: NextFunction) => {
-  const driver = await Driver.findOne({ userId: req.id }).populate("userId").exec();
+  const driver = await Driver.findOne({ userId: req.id });
   if (!driver) {
     throw new AppError(StatusCodes.NOT_FOUND, "Driver must be add driving information");
   }
