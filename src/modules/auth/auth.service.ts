@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import AppError from "../../helpers/AppError";
 import { User } from "../user/user.model";
 import { IUser } from "../user/user.type";
-import { createUsersToken } from "../../utils/userTokens";
+import { createNewAccessTokenWithRefreshToken, createUsersToken } from "../../utils/userTokens";
 import { setAuthCookie } from "../../utils/setCookie";
 import { Response } from "express";
 
@@ -16,6 +16,12 @@ export const authService = {
 
     const user = User.create(payload);
     return user;
+  },
+  getNewAccessToken: async (refreshToken: string) => {
+    const newAccessToken = await createNewAccessTokenWithRefreshToken(refreshToken);
+    return {
+      accessToken: newAccessToken,
+    };
   },
   login: async (res: Response, payload: Partial<IUser>) => {
     const { email, password } = payload;
